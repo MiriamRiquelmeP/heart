@@ -37,9 +37,29 @@ ui <- page_sidebar(
     )
   ),
   navset_tab(
-    nav_panel("Overview", "Overview content coming soon..."),
-    nav_panel("Explore", "Explore content coming soon..."),
-    nav_panel("Data", dataTableOutput("data_table"))
+    nav_panel("Overview", 
+              layout_column_wrap(
+                width = 1/2,
+                value_box(
+                  title = "Female Mortality",
+                  value = textOutput("f_mortality"),
+                  theme = "danger",
+                  showcase = bsicons::bs_icon("gender-female")
+                ),
+                value_box(
+                  title = "Male Mortality",
+                  value = textOutput("m_mortality"),
+                  theme = "primary",
+                  showcase = bsicons::bs_icon("gender-male")
+                )
+              )
+            ),
+    nav_panel("Explore",
+              "Explore content coming soon..."
+             ),
+    nav_panel("Data", 
+              dataTableOutput("data_table")
+              )
   )
 )
 
@@ -62,6 +82,18 @@ server <- function(input, output, session) {
   
   output$data_table <- renderDataTable({
     filtered_data()
+  })
+  
+  # Female stats
+  output$f_mortality <- renderText({
+    d <- filtered_data()[filtered_data()$SEX == "Female", ]
+    paste0(round(100 * sum(d$DIED == "Died") / nrow(d), 1), "%")
+  })
+  
+  # Male stats
+  output$m_mortality <- renderText({
+    d <- filtered_data()[filtered_data()$SEX == "Male", ]
+    paste0(round(100 * sum(d$DIED == "Died") / nrow(d), 1), "%")
   })
   
 }
