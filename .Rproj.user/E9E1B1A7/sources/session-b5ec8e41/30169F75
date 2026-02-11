@@ -3,7 +3,7 @@
     "path": "~/Escritorio/workshop_shiny_ai/heart/app.R",
     "project_path": "app.R",
     "type": "r_source",
-    "hash": "33522718",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1770818218723.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "86,16",
-        "scrollLine": "65"
+        "cursorPosition": "123,57",
+        "scrollLine": "100"
     },
     "folds": "",
-    "lastKnownWriteTime": 1770820136,
+    "lastKnownWriteTime": 1770822501,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1770820136889,
+    "last_content_update": 1770822501147,
     "read_only": false,
     "read_only_alternatives": []
 }

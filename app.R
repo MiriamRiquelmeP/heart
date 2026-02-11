@@ -1,6 +1,8 @@
 library(shiny)
 library(bslib)
 library(DT)
+library(ggplot2)
+library(plotly)
 
 heart <- readRDS("data/heart.rds")
 
@@ -52,14 +54,18 @@ ui <- page_sidebar(
                   theme = "primary",
                   showcase = bsicons::bs_icon("gender-male")
                 )
+              ),
+              card(
+                card_header("Age Distribution"),
+                plotOutput("age_hist")
               )
             ),
     nav_panel("Explore",
-              "Explore content coming soon..."
+              plotlyOutput("scatter_plot")
              ),
     nav_panel("Data", 
               dataTableOutput("data_table")
-              )
+             )
   )
 )
 
@@ -94,6 +100,33 @@ server <- function(input, output, session) {
   output$m_mortality <- renderText({
     d <- filtered_data()[filtered_data()$SEX == "Male", ]
     paste0(round(100 * sum(d$DIED == "Died") / nrow(d), 1), "%")
+  })
+  
+  output$age_hist <- renderPlot({
+    req(nrow(filtered_data()) >= 2)
+    ggplot(filtered_data(), aes(x = AGE, fill = DIED)) +
+      geom_density(alpha = 0.5) +
+      labs(x = "Age", y = "Density", fill = "DIED") +
+      facet_wrap(~ SEX) +
+      theme_minimal() +
+      theme(
+        axis.title = element_text(size = 16),
+        axis.text = element_text(size = 14)
+      )
+  })
+  
+  output$scatter_plot <- renderPlotly({
+    df <- filtered_data()
+    req(nrow(df) >= 1)
+    if(nrow(df) > 1000) {
+      df <- df[sample(nrow(df), 1000), ]
+    }
+    p <- ggplot(df, aes(x = AGE, y = LOS, color = SEX)) +
+      geom_point(alpha = 0.3) +
+      labs(x = "Age", y = "Length of Stay (days)", color = "Sex") +
+      geom_smooth(method = "lm", se = FALSE) +
+      theme_minimal()
+    ggplotly(p)
   })
   
 }
