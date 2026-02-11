@@ -1,4 +1,4 @@
-install.packages(c("DT", "ggplot2", "plotly", "bsicons"))
+# install.packages(c("DT", "ggplot2", "plotly", "bsicons"))
 
 # Prepare heart attack data for Shiny app
 heart <- read.delim("data/heartatk4R.txt")
